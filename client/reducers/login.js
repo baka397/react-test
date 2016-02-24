@@ -3,11 +3,14 @@
  * 登录
  * 生成变量:login
  */
+//导入初始化登录状态
+import CURRENT_USER from 'current-user';
+
 //导入action常量
 import { LOGIN_REQUEST, LOGIN_RECEIVE, LOGIN_ERROR, LOGOUT_REQUEST, LOGOUT_RECEIVE, LOGOUT_ERROR,LOGIN_STATUS_OUT,LOGIN_STATUS_IN,LOGIN_STATUS_LOAD,LOGIN_STATUS_ERROR } from '../actions/login';
 
 //初始化state
-let init_state = {
+const INIT_STATE = {
     status: LOGIN_STATUS_OUT,
     info: {
         name: '',
@@ -16,7 +19,7 @@ let init_state = {
     msg: ''
 }
 
-export default function login(state = init_state, action) {
+export default function login(state = CURRENT_USER, action) {
     switch (action.type) {
         case LOGIN_REQUEST:
             return Object.assign({}, state, {
@@ -41,7 +44,7 @@ export default function login(state = init_state, action) {
             });
             break;
         case LOGOUT_RECEIVE:
-            return Object.assign({}, state, init_state);
+            return Object.assign({}, state, INIT_STATE);
             break;
         case LOGOUT_ERROR:
             return Object.assign({}, state, {

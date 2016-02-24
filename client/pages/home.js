@@ -21,7 +21,7 @@ class Index extends Component {
     componentDidMount(){
         const { login,dispatch } = this.props;
         //检测是否登录
-        dispatch(authLoginStatus(login.status,true));
+        dispatch(authLoginStatus(login.status,false));
     }
     render() {
         const { login,dispatch } = this.props;
