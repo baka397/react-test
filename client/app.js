@@ -1,83 +1,55 @@
 /**
  * app
  */
-import React, { PropTypes } from 'react'
-import ReactDOM from 'react-dom'
-import { createStore,applyMiddleware} from 'redux'
-import { Provider, connect } from 'react-redux'
-import thunk from 'redux-thunk'
 
-// React component
-class Counter extends React.Component {
-  render () {
-    const { value, onIncreaseClick } = this.props
-    return (
-      <div>
-        <span>{value}</span>
-        <button onClick={onIncreaseClick}>Increase</button>
-      </div>
-    )
-  }
-}
+//加载依赖
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider,Counter } from 'react-redux';
+import { Router, Route, browserHistory,IndexRoute } from 'react-router';
+import { syncHistory } from 'react-router-redux';
+import thunk from 'redux-thunk';
+import {reducer} from './reducers/index';
 
-Counter.propTypes = {
-  value: PropTypes.number.isRequired,
-  onIncreaseClick: PropTypes.func.isRequired
-}
+//加载页面
+import Layout from './pages/layout'; //公共组件
+import Home from './pages/home'; //首页
+import Dashboard from './pages/dashboard'; //控制面板
 
-// Action
-const increaseAction = {type: 'increase'}
-
-// Reducer
-function counter (state = {count: 0}, action) {
-  let count = state.count
-  switch (action.type) {
-    case 'increase':
-      return {count: count + 1}
-    default:
-      return state
-  }
-}
+// Sync dispatched route actions to the history
+const reduxRouterMiddleware = syncHistory(browserHistory);
 
 //插入中间件
 let createStoreWithMiddleware = applyMiddleware(
-  thunk
+  thunk,
+  reduxRouterMiddleware
 )(createStore)
 
-//载入redux debug插件
-function configureStore(reducer,initialState) {
-  const store = createStoreWithMiddleware(reducer, initialState, 
-    window.devToolsExtension ? window.devToolsExtension() : undefined
-  );
-  return store;
+if(process.env.NODE_ENV==='production'){
+  var store = createStoreWithMiddleware(reducer,{});
 }
-// Store
-//let store = createStore(counter);
-let store = configureStore(counter,{count:0});
-
-// Map Redux state to component props
-function mapStateToProps (state) {
-  return {
-    value: state.count
+else{
+  //载入redux debug插件
+  function configureStore(initialState) {
+    const store = createStoreWithMiddleware(reducer, initialState, 
+      window.devToolsExtension ? window.devToolsExtension() : undefined
+    );
+    return store;
   }
+  // Store
+  var store = configureStore({});
 }
 
-// Map Redux actions to component props
-function mapDispatchToProps (dispatch) {
-  return {
-    onIncreaseClick: () => dispatch(increaseAction)
-  }
-}
-
-// Connected Component
-let App = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Counter)
-
+//创建路由
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Router history={browserHistory}>
+      <Route path="/" component={Layout}>
+          <IndexRoute component={Home}/>
+          <Route path="dashboard" component={Dashboard} />
+      </Route>
+    </Router>
   </Provider>,
   document.getElementById('page')
 )
