@@ -17,7 +17,7 @@ import { loginPost,LOGIN_STATUS_IN } from '../actions/login';
 import {propMap} from '../reducers/index';
 
 //封装组件
-class Index extends Component {
+class Home extends Component {
     componentDidMount(){
         const { login,dispatch } = this.props;
         //检测是否登录
@@ -34,4 +34,4 @@ class Index extends Component {
         );
     }
 }
-export default connect(propMap)(Index);
+export default connect(propMap)(Home);
