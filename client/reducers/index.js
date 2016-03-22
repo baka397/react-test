@@ -15,6 +15,7 @@ import {  routeReducer } from 'react-router-redux';
  */
 export function propMap(state){
 	return {
+		routing:state.routing,
 		login:state.login
 	}
 }
