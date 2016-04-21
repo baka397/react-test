@@ -15,7 +15,6 @@ import {reducer} from './reducers/index';
 //加载页面
 import Layout from './pages/layout'; //公共组件
 import Home from './pages/home'; //首页
-import Dashboard from './pages/dashboard'; //首页
 
 // Sync dispatched route actions to the history
 const reduxRouterMiddleware = syncHistory(browserHistory);
