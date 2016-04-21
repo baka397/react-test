@@ -21,6 +21,7 @@ class Dashboard extends Component {
         dispatch(authLoginStatus(login.status,true));
     }
     render() {
+        console.log(132);
         const { login,dispatch } = this.props;
         return (
         	<div>

@@ -15,7 +15,7 @@ import {reducer} from './reducers/index';
 //加载页面
 import Layout from './pages/layout'; //公共组件
 import Home from './pages/home'; //首页
-import Dashboard from './pages/dashboard'; //控制面板
+import Dashboard from './pages/dashboard'; //首页
 
 // Sync dispatched route actions to the history
 const reduxRouterMiddleware = syncHistory(browserHistory);
@@ -47,7 +47,12 @@ ReactDOM.render(
     <Router history={browserHistory}>
       <Route path="/" component={Layout}>
           <IndexRoute component={Home}/>
-          <Route path="dashboard" component={Dashboard} />
+          <Route path="dashboard" getComponents={(nextState, callback)=>{
+            let dashboard = require('./pages/dashboard');
+            require.ensure([], function (require) {
+              callback(null,dashboard.default);
+            })
+          }} />
       </Route>
     </Router>
   </Provider>,
